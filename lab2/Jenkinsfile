@@ -1,12 +1,12 @@
 pipeline {
     agent { docker { image 'python:3.10.13-slim-bookworm' } }
     stages {
-        stage('build') {
+        stage('Build') {
             steps {
-                sh 'python --version'
+                sh 'python3 --version'
             }
         }
-        stage('git') {
+        stage('Git Pulling') {
             steps {
                 echo 'Git'
                 git(
@@ -17,22 +17,17 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Runnin ML Pipeline') {
             steps {
-                echo 'Installing dependencies'
-                dir('./') {
-                    sh 'pip install -r requirements.txt'
-                }
+                sh '''
+                    python3 -m venv ./venv
+                    . venv/bin/activate
+                    pip3 install -r requirements.txt
+                    cd ./lab1/
+                    ./pipeline.sh
+                '''
             }
-        }
 
-        stage('ML-Pipeline') {
-            steps {
-                echo 'Calling pipeline.sh'
-                dir('./lab1/') {
-                    sh './pipeline.sh'
-                }
-            }
         }
     }
 }
