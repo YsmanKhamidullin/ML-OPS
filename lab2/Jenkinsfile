@@ -20,7 +20,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies'
-                dir('./lab1/') {
+                dir('./') {
                     sh 'pip install -r requirements.txt'
                 }
             }
